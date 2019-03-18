@@ -1,21 +1,40 @@
 // import './css/styles.css'; // Should not need this if compiling sass
 import $ from 'jquery';
 import './scss/styles.scss';
-import { addToTen } from './js/project.js';
+import { Blob } from './blob.js'
+
+
+function refreshScores(blob) {
+  $(".hunger").text(blob.foodLvl);
+  $(".mood").text(blob.mood);
+  $(".energy").text(blob.energy);
+  $(".cleanliness").text(blob.cleanliness);
+  $(".remainingDay").text(blob.remainingDay);
+}
 
 $(document).ready(function(){
-  $("#adder").submit(function(event) {
+
+  const blob = new Blob();
+
+  blob.start();
+  $(".sleep").click(function(event){
     event.preventDefault();
-    const num1 = parseInt($("#num1").val());
-    const num2 = parseInt($("#num2").val());
-    let result = addToTen(num1,num2);
-    console.log(result);
-    let answer = "";
-    if (result === true) {
-      answer = "";
-    } else {
-      answer = "do not ";
-    }
-    $(".result").html(`<p>${num1} and ${num2} ${answer}add up to 10.</p>`);
+    blob.sleep();
   });
+  const feedBlob = blob.feed(50);
+  feedBlob("apple");
+
+  const trainAgi = blob.train("agi");
+  trainAgi(10);
+  trainAgi(15);
+  const trainInt = blob.train("int");
+  trainInt(10);
+  trainAgi(20);
+
+  setTimeout(() => blob.work(15), 2000);
+
+
+  setInterval(function(){
+    refreshScores(blob);
+  }, 1000);
 });
